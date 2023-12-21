@@ -20,7 +20,7 @@ The system runs in a background thread and uses the Linux pulseaudio frontend (s
 
 This code needs a valid Picovoice key to operate. You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](config/picovoice.key). 
 
-The code here has been compiled for RPi4. If you want to build for Jetson Nano instead, change which library is commented out on line 38 of [CMakeLists.txt](CMakeLists.txt). To run the code you will also need pulseaudio installed. 
+The code here has been compiled for RPi4. If you want to build for Jetson Nano instead, change which library is commented out on line 42 of [CMakeLists.txt](CMakeLists.txt). To run the code you will also need pulseaudio installed. 
 
     sudo apt-get install pulseaudio pavucontrol libasound2-dev
 
