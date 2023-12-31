@@ -18,7 +18,7 @@ The system runs in a background thread and uses the Linux pulseaudio front end (
 
 ## Configuration
 
-This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](config/picovoice.key). 
+This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](config/picovoice.key). Be aware that, although the system runs locally, it does need an active **internet connection** at startup in order to validate this key.
 
 The code here has been compiled for RPi4 and should be usable as is. If you want to build for Jetson Nano instead, change which library is commented out on line 42 of [CMakeLists.txt](CMakeLists.txt). To run the code you will also need pulseaudio installed:
 
