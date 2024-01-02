@@ -1,7 +1,7 @@
 # Pico Reco
 ## Local Speech Recognition for Small Robots
 
-This project provides low-resource streaming speech recognition using the Picovoice Cheetah system (free). It operates completely offline (no network) and is available as a [C++ class](src/jhcPicoReco.cpp) or a [Python wrapper](pico_reco.py). The code is known to work on Jetson Nano running Ubuntu 18.04 and Raspberry Pi 4B running Bullseye (but **not** Buster). 
+This project provides low-resource streaming speech recognition using the Picovoice Cheetah system (free). It operates completely offline (no network) and is available as a [C++ class](src/jhcPicoReco.cpp) or a [Python wrapper](pico_reco.py). The code is known to work on Jetson Nano running Ubuntu 18.04 and Raspberry Pi 4B running Bullseye (but **not** Buster). Its [latency](https://youtu.be/qWLANb0PmbM) is under a second.
 
 All speech commands (as delimited by pauses) are transcribed with no special attention word. To use the system call the "start" function, loop using the "status" function, then pull result strings using the "heard" function. The simple program [test_reco](src/test_reco.cpp) shows how to do this (or see \_\_main\_\_ in the Python wrapper). Below is an example session:
 
