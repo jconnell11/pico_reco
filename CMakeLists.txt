@@ -39,8 +39,9 @@ set_target_properties(test_reco PROPERTIES
 # Note: these library paths are "baked into" resulting shared lib
 #       copy appropriate version to /usr/lib if built somewhere else
 set(pico_reco_LIB
-#  ${PROJECT_SOURCE_DIR}/lib_jet/libpv_cheetah.so  # Cortex a57 64 bit
-  ${PROJECT_SOURCE_DIR}/lib_rpi/libpv_cheetah.so  # Cortex a72 32 bit
+#  ${PROJECT_SOURCE_DIR}/lib_jet/libpv_cheetah.so   # Cortex a57 64 bit
+  ${PROJECT_SOURCE_DIR}/lib_pi64/libpv_cheetah.so  # Cortex a72 64 bit
+#  ${PROJECT_SOURCE_DIR}/lib_rpi/libpv_cheetah.so   # Cortex a72 32 bit
   libasound.so
   pthread
 )

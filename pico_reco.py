@@ -27,7 +27,7 @@
 
 import time
 
-from ctypes import *
+from ctypes import CDLL, c_char_p
 
 import os
 here = os.path.dirname(__file__)       
@@ -53,6 +53,7 @@ class PicoReco:
 
   # get last complete utterance head by the speech recognizer
   def Heard(self):
+    lib.pico_heard.restype = c_char_p
     msg = c_char_p(lib.pico_heard()).value
     return msg.decode()
 
