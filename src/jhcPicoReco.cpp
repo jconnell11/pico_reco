@@ -4,7 +4,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2023 Etaoin Systems
+// Copyright 2023-2024 Etaoin Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,8 +69,8 @@ jhcPicoReco::jhcPicoReco ()
   running = 0;
 
   // noise model
-  avg = 400.0;
-  var = 50.0 * 50.0;
+  avg = 0.0;
+  var = 0.0;
 
   // initial state 
   *partial = '\0';
@@ -155,6 +155,7 @@ int jhcPicoReco::cheetah_cfg (const char *path)
  
 
 //= Opens default audio device for streaming input to speech recognizer.
+// uses value from set-default-source in /etc/pulse/default.pa
 // returns 1 if okay, 0 or negative for problem
 
 int jhcPicoReco::open_mic ()
@@ -298,7 +299,7 @@ void *jhcPicoReco::pcm_reco (void *shell)
 int jhcPicoReco::voice () 
 {
   const int16_t *b = frame;
-  float diff, mix = 0.02, f = 2.0;
+  float diff, mix = 0.02, f = 2.5;
   int i, th, ans = 0, vol = 0;
 
   // estimate current volume as max in frame
@@ -307,6 +308,12 @@ int jhcPicoReco::voice ()
       vol = b[i];
   if (vol < 10)              // muted
     return 0;
+
+  // initialize statistics (if needed)
+  if (avg <= 0.0)
+    avg = vol;         
+  else if (var <= 0.0)
+    var = (vol - avg) * (vol - avg);
 
   // see if volume unlikely given noise model
   th = (int)(avg + f * sqrt(var) + 0.5);
