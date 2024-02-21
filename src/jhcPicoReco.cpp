@@ -36,15 +36,7 @@
 
 jhcPicoReco::~jhcPicoReco ()
 {
-  if (running > 0)
-  {
-    pthread_cancel(bg);
-    pthread_join(bg, 0);
-  }
-  if (reco != NULL)
-    pv_cheetah_delete(reco);
-  if (mic != NULL)
-    snd_pcm_close(mic);
+  Done();
   pthread_mutex_destroy(&vars);
   delete [] frame;
 }
@@ -68,6 +60,16 @@ jhcPicoReco::jhcPicoReco ()
   pthread_mutex_init(&vars, NULL);
   running = 0;
 
+  // state and parameters
+  clr_state();
+  dbg = 0;
+}
+
+
+//= Initialize all variables for start of run.
+
+void jhcPicoReco::clr_state ()
+{
   // noise model
   avg = 0.0;
   var = 0.0;
@@ -77,9 +79,6 @@ jhcPicoReco::jhcPicoReco ()
   *result = '\0';
   active = 0;
   ready = 0;
-
-  // parameters
-  dbg = 0;
 }
 
 
@@ -125,7 +124,7 @@ int jhcPicoReco::cheetah_cfg (const char *path)
   sprintf(kfile, "%s/config/picovoice.key", dir);
   if ((in = fopen(kfile, "r")) == NULL)
   {
-    printf(">>> Picovoice missing key: %s !\n", kfile);
+    printf(">>> Picovoice missing key file:\n    %s\n", kfile);
     return -2;
   }
   rc = fgets(key, 80, in);
@@ -140,7 +139,7 @@ int jhcPicoReco::cheetah_cfg (const char *path)
   key[n] = '\0';
   if (n != 56)
   {
-    printf(">>> Picovoice bad key: %s !\n", kfile);
+    printf(">>> Picovoice bad key file:\n    %s\n", kfile);
     return -1;
   }
 
@@ -149,7 +148,7 @@ int jhcPicoReco::cheetah_cfg (const char *path)
   if ((st = pv_cheetah_init(key, mfile, 0.5f, false, &reco)) 
       == PV_STATUS_SUCCESS)
     return 1;
-  printf(">>> Picovoice likely bad model: %s !\n", mfile);
+  printf(">>> Picovoice bad key or bad model:\n    %s\n", mfile);
   return 0;
 }
  
@@ -378,3 +377,29 @@ const char *jhcPicoReco::Heard (char *txt)
   pthread_mutex_unlock(&vars);
   return txt;
 }
+
+
+//= Cleanly shut down all parts of the system.
+
+void jhcPicoReco::Done ()
+{
+  // stop speech recognition thread
+  if (running > 0)
+  {
+    pthread_cancel(bg);
+    pthread_join(bg, 0);
+    running = 0;
+  }
+
+  // release recognizer and microphone
+  if (reco != NULL)
+    pv_cheetah_delete(reco);
+  if (mic != NULL)
+    snd_pcm_close(mic);
+  mic = NULL;
+  reco = NULL;
+
+  // initialize state (for restart)
+  clr_state();
+}
+

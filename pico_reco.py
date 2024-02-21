@@ -9,7 +9,7 @@
 #
 # =========================================================================
 #
-# Copyright 2023 Etaoin Systems
+# Copyright 2023-2024 Etaoin Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,18 +31,19 @@ from ctypes import CDLL, c_char_p
 
 import os
 here = os.path.dirname(__file__)       
-lib = CDLL(here + '/libpico_reco.so')   
+lib = CDLL(here + '/libpico_reco.so')  
+lib.pico_heard.restype = c_char_p 
        
 
 # Python wrapper for Picovoice Cheetah speech recognizer
 # needs key file = "picovoice.key" and model file = "cheetah_params.pv"
 # assumes files are in subdirectory "config" wrt script directory
-# returns 1 if okay, 0 or negative for problem
 
 class PicoReco:
 
   # connect to speech recognition engine using stored credentials
   # can optionally print out partial results as they become available
+  # returns 1 if okay, 0 or negative for problem
   def Start(self, partial):
     return lib.pico_start(here.encode(), partial)
 
@@ -51,29 +52,33 @@ class PicoReco:
   def Status(self):
     return lib.pico_status()
 
-  # get last complete utterance head by the speech recognizer
+  # get last complete utterance heard by the speech recognizer
   def Heard(self):
-    lib.pico_heard.restype = c_char_p
-    msg = c_char_p(lib.pico_heard()).value
+    msg = lib.pico_heard().value
     return msg.decode()
+
+  # cleanly shut down system
+  def Done(self):
+    lib.pico_done()
 
 
 # =========================================================================
 
 # simple test program runs using default microphone for 20 seconds
 if __name__ == "__main__":
-  r = PicoReco();
+  reco = PicoReco();
   print('Configuring Picovoice and connecting to microphone ...')
-  if r.Start(1) <= 0:
+  if reco.Start(1) <= 0:
     print('  >>> Failed!')
   else:
     print('--- Transcribing for 20 secs ---')
     for i in range(600):
-      st = r.Status()
-      if st < 0:
+      rc = reco.Status()
+      if rc < 0:
         break
-      if st == 2:
-        print('  ' + r.Heard())
+      if rc == 2:
+        print('  ' + reco.Heard())
       time.sleep(0.033) 
+  reco.Done()
   print('--- Done ---')
 

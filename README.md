@@ -1,7 +1,7 @@
 # Pico Reco
-## Local Speech Recognition for Small Robots
+## Speech Recognition for Small Robots
 
-This project provides low-resource streaming speech recognition using the Picovoice Cheetah system (free). It operates completely offline (no network) and is available as a [C++ class](src/jhcPicoReco.cpp) or a [Python wrapper](pico_reco.py). The code is known to work on Jetson Nano running Ubuntu 18.04 and Raspberry Pi 4 running Bullseye (but **not** Buster). Its latency is under a second as seen in this [video](https://youtu.be/qWLANb0PmbM).
+This project provides low-resource streaming speech recognition using the Picovoice Cheetah system (free). It processes speech offline and is available as a [C++ class](src/jhcPicoReco.cpp) or a [Python wrapper](pico_reco.py). The code is known to work on Jetson Nano running Ubuntu 18.04 and Raspberry Pi 4 running Bullseye (but **not** Buster). Its latency is under a second, as seen in this [video](https://youtu.be/qWLANb0PmbM).
 
 All speech commands (as delimited by pauses) are transcribed with no special attention word. To use the system call the "start" function, loop using the "status" function, then pull result strings using the "heard" function. The simple program [test_reco](src/test_reco.cpp) shows how to do this (or see \_\_main\_\_ in the Python wrapper). Below is an example session:
 
@@ -18,7 +18,7 @@ The system runs in a background thread and uses the Linux pulseaudio front end (
 
 ## Configuration
 
-This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](config/picovoice.key). Be aware that, although the system runs locally, it does need an active **internet connection** at startup in order to validate this key.
+This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](config/picovoice.key). Unfortunately, your robot must have an active **internet connection** in order to validate and run with this key, thus negating a prime advantange. Maybe Picovoice will offer a local license in the future ...
 
 The code here has been compiled for RPi4 64 bit and should be usable as is. If you want to build for Jetson Nano instead, change which library is commented out on line 43 of [CMakeLists.txt](CMakeLists.txt). To run the code you will also need pulseaudio installed:
 
@@ -32,4 +32,4 @@ You might also want to check for an updated version of the run-time model [cheet
 
 ---
 
-January 2024 - Jonathan Connell - jconnell@alum.mit.edu
+February 2024 - Jonathan Connell - jconnell@alum.mit.edu

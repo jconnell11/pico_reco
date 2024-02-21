@@ -71,11 +71,13 @@ public:
   // main functions
   int Status ();
   const char *Heard (char *txt);
+  void Done ();
 
 
 // PRIVATE MEMBER FUNCTIONS
 private:
   // creation and initialization
+  void clr_state ();
   int cheetah_cfg (const char *path);
   int open_mic ();
   static void *pcm_reco (void *shell);
