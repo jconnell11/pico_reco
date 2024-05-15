@@ -44,20 +44,27 @@ class PicoReco:
   # connect to speech recognition engine using stored credentials
   # can optionally print out partial results as they become available
   # returns 1 if okay, 0 or negative for problem
+
   def Start(self, partial):
     return lib.pico_start(here.encode(), partial)
 
+
   # check to see if a new utterance is available
   # return: 2 new result, 1 speaking, 0 silence, negative for error
+
   def Status(self):
     return lib.pico_status()
 
+
   # get last complete utterance heard by the speech recognizer
+
   def Heard(self):
     msg = lib.pico_heard().value
     return msg.decode()
 
+
   # cleanly shut down system
+
   def Done(self):
     lib.pico_done()
 
@@ -65,6 +72,7 @@ class PicoReco:
 # =========================================================================
 
 # simple test program runs using default microphone for 20 seconds
+
 if __name__ == "__main__":
   reco = PicoReco();
   print('Configuring Picovoice and connecting to microphone ...')
