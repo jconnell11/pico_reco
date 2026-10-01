@@ -20,7 +20,7 @@ The system runs in a background thread and uses the Linux pulseaudio front end (
 
 ## Configuration
 
-This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](../project/config/picovoice.key). Unfortunately, your robot must have an active **internet connection** in order to validate and run with this key, thus negating a prime advantange. Maybe Picovoice will offer a local license in the future ...
+This code needs a valid Picovoice key to operate! You can [sign up](https://console.picovoice.ai/signup) for free then copy your AccessKey string to file [picovoice.key](../project/config/picovoice.key). Unfortunately, your robot must have an active **internet connection** in order to validate and run with this key, thus negating a prime advantage. Maybe Picovoice will offer a local license in the future ...
 
 The code here has been compiled for RPi4 64 bit and should be usable as is. If you want to build for Jetson Nano instead, change which library is commented out on line 43 of [CMakeLists.txt](../project/CMakeLists.txt). To run the code you will also need pulseaudio installed:
 
